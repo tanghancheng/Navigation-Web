@@ -4,6 +4,7 @@ import (
 	"Navigation-Web/dao"
 	"gorm.io/gorm"
 	"log"
+	"time"
 )
 
 type NavigationInfo struct {
@@ -30,6 +31,8 @@ func GetOne(id int) (navigationInfo NavigationInfo, err error) {
 }
 
 func Create(info *NavigationInfo) (err error) {
+	info.CreatedAt = time.Now()
+	info.UpdatedAt = time.Now()
 	result := dao.DB.Create(&info)
 	if result.Error != nil {
 		return err
@@ -37,6 +40,7 @@ func Create(info *NavigationInfo) (err error) {
 	return nil
 }
 func Update(info *NavigationInfo) (err error) {
+	info.UpdatedAt = time.Now()
 	result := dao.DB.Save(&info)
 	if result.Error != nil {
 		return err
