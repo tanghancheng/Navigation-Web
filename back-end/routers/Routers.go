@@ -1,6 +1,7 @@
 package routers
 
 import (
+	"Navigation-Web/handler"
 	"Navigation-Web/routers/Navigation"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -8,7 +9,9 @@ import (
 
 func InitRoutes() {
 	r := gin.Default()
-	Navigation.NavigationRouterApi.InitNavigationRouter(r)
+	apiRouter := r.Group("api")
+	apiRouter.Use(handler.JWTAuth())
+	Navigation.NavigationRouter.InitNavigationRouter(apiRouter)
 	err := r.Run(":8888")
 	if err != nil {
 		fmt.Println("服务启动失败", err)

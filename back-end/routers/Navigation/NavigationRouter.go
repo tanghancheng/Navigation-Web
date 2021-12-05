@@ -5,12 +5,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type NavigationRouter struct {
+type navigationRouter struct {
 }
 
-var NavigationRouterApi = new(NavigationRouter)
+var NavigationRouter = new(navigationRouter)
 
-func (n *NavigationRouter) InitNavigationRouter(r *gin.Engine) {
+func (n *navigationRouter) InitNavigationRouter(r *gin.RouterGroup) {
 	navigationRouter := r.Group("navigation")
 	{
 		navigationRouter.GET("/navigation", controller.GetAll)
