@@ -1,7 +1,7 @@
 {
-  "name": "demo",
+  "name": "front-end",
   "version": "1.0.0",
-  "description": "demo",
+  "description": "front-end",
   "author": "tang <1370037386@qq.com>",
   "private": true,
   "scripts": {
@@ -10,6 +10,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "axios": "^0.24.0",
     "element-ui": "^2.15.6",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"

@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+import Navigation from '@/components/Navigation'
 import Index from '@/components/Index'
+import NavigationList from '@/components/Navigation/NavigationList'
 
 
 Vue.use(Router)
@@ -14,9 +15,14 @@ export default new Router({
       component: Index
     },
     {
-      path: '/HelloWorld',
-      name: 'HelloWorld',
-      component: HelloWorld
-    }
+      path: '/navigation',
+      name: 'Navigation',
+      component: Navigation
+    },
+    {
+      path: '/navigationList',
+      name: 'NavigationList',
+      component: NavigationList
+    },
   ]
 })

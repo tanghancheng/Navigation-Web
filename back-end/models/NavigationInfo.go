@@ -2,17 +2,19 @@ package models
 
 import (
 	"Navigation-Web/dao"
-	"gorm.io/gorm"
-	"log"
+	"Navigation-Web/utils"
 	"time"
 )
 
 type NavigationInfo struct {
-	gorm.Model
-	Title string `json:"title"`
-	Url   string `json:"url"`
-	Logo  string `json:"logo"`
+	ID        uint      `json:"id"`
+	Title     string    `json:"title"`
+	Url       string    `json:"url"`
+	Logo      string    `json:"logo"`
+	CreatedAt utils.JsonTime `json:"created_time"`
+	UpdatedAt utils.JsonTime `json:"update_time"`
 }
+
 
 func GetAll() (navigationInfos []NavigationInfo, err error) {
 	result := dao.DB.Find(&navigationInfos)
@@ -21,8 +23,8 @@ func GetAll() (navigationInfos []NavigationInfo, err error) {
 	}
 	return navigationInfos, nil
 }
-func GetOne(id int) (navigationInfo NavigationInfo, err error) {
-	log.Println(id)
+
+func GetOne(id int) (navigationInfo *NavigationInfo, err error) {
 	result := dao.DB.First(&navigationInfo, id)
 	if result.Error != nil {
 		return navigationInfo, err
@@ -31,8 +33,8 @@ func GetOne(id int) (navigationInfo NavigationInfo, err error) {
 }
 
 func Create(info *NavigationInfo) (err error) {
-	info.CreatedAt = time.Now()
-	info.UpdatedAt = time.Now()
+	info.CreatedAt=utils.JsonTime(time.Now())
+	info.UpdatedAt=utils.JsonTime(time.Now())
 	result := dao.DB.Create(&info)
 	if result.Error != nil {
 		return err
@@ -40,7 +42,7 @@ func Create(info *NavigationInfo) (err error) {
 	return nil
 }
 func Update(info *NavigationInfo) (err error) {
-	info.UpdatedAt = time.Now()
+	info.UpdatedAt=utils.JsonTime(time.Now())
 	result := dao.DB.Save(&info)
 	if result.Error != nil {
 		return err

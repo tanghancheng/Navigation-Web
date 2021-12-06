@@ -1,7 +1,7 @@
 <template>
   <div>
     <transition name="el-zoom-in-top">
-      <el-container style="height: 775px; border: 1px solid #eee">
+      <el-container style="height: 775px; border: 0px solid #eee">
         <el-header>
           <el-row :gutter="20">
             <el-col :span="23"
@@ -14,44 +14,7 @@
           </el-row>
         </el-header>
         <el-container>
-          <el-aside width="210px">
-            <el-radio-group
-              v-model="isCollapse"
-              style="margin-bottom: 10px; background-color: #fff0"
-            >
-              <el-radio-button :label="false"
-                ><li class="el-icon-plus"></li
-              ></el-radio-button>
-              <el-radio-button :label="true"
-                ><li class="el-icon-minus"></li
-              ></el-radio-button>
-            </el-radio-group>
-            <el-menu
-              default-active="1-4-1"
-              class="el-menu-vertical-demo"
-              @open="handleOpen"
-              @close="handleClose"
-              :collapse="isCollapse"
-              style="background-color: #fff0"
-            >
-              <el-menu-item index="1">
-                <i class="el-icon-location"></i>
-                <span slot="title">导航二</span>
-              </el-menu-item>
-              <el-menu-item index="2">
-                <i class="el-icon-menu"></i>
-                <span slot="title">导航二</span>
-              </el-menu-item>
-              <el-menu-item index="3">
-                <i class="el-icon-document"></i>
-                <span slot="title">导航三</span>
-              </el-menu-item>
-              <el-menu-item index="4">
-                <i class="el-icon-setting"></i>
-                <span slot="title">导航四</span>
-              </el-menu-item>
-            </el-menu>
-          </el-aside>
+         <Aside />
           <el-main>
             <Search />
             <el-row :gutter="20" style="margin-top: 100px">
@@ -93,11 +56,13 @@
 <script>
 import Search from "../components/Search.vue";
 import WebItem from "../components/WebItem.vue";
+import Aside from "../components/Aside.vue";
 import itemsData from "../assets/data.json";
 export default {
   components: {
     Search,
     WebItem,
+    Aside,
   },
   data() {
     return {
@@ -116,6 +81,9 @@ export default {
       return this.lang.key === "en" ? webItem.en_name : webItem.name;
     },
     moveSlow() {},
+    checkToNavigtionList() {
+      this.$router.push("/navigationList");
+    },
   },
 };
 </script>
