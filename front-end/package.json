@@ -1,15 +1,16 @@
 {
-  "name": "front-end",
+  "name": "demo",
   "version": "1.0.0",
-  "description": "A Vue.js project",
+  "description": "demo",
   "author": "tang <1370037386@qq.com>",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
-    "start": "npm run dev",
+    "serve": "npm run dev",
     "build": "node build/build.js"
   },
   "dependencies": {
+    "element-ui": "^2.15.6",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
   },

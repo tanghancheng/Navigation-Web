@@ -1,0 +1,21 @@
+[
+
+    {
+        "url": "http://116.205.138.224/",
+        "logo": "https://www.gin-vue-admin.com/img/logo.png",
+        "title": "Gin-Vue-Admin",
+        "desc": "github上的一个基于golang 和vue2 开发的一个项目 "
+    },
+    {
+        "url": "https://www.baidu.com/",
+        "logo": "https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png",
+        "title": "百度",
+        "desc": "Adobe旗下的设计师交流平台，来自世界各地的设计师在这里分享自己的作品。"
+    },
+    {
+        "url": "https://fanyi.baidu.com/",
+        "logo": "https://fanyi-cdn.cdn.bcebos.com/static/translation/img/header/logo_e835568.png",
+        "title": "百度翻译",
+        "desc": "图形交互与界面设计交流、作品展示、学习平台。"
+    }
+]
