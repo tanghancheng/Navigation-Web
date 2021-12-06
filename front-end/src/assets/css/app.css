@@ -1,0 +1,90 @@
+.home {
+  width: 30%;
+  height: 20%;  
+  overflow: hidden;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-attachment: fixed;
+}
+.time {
+  position: fixed;
+  top: 150px;
+  left: 48%;
+  font-size: 30px;
+  cursor: pointer;
+  color: #fff;
+  transition: 0.3s;
+}
+.time:hover {
+  transform: scale(1.1);
+}
+.search_box {
+  position: fixed;
+  top: 235px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 40px;
+  height: 40px;
+  background: white;
+}
+.search_ipt {
+  border: none;
+  background: none;
+  outline: none;
+  float: left;
+  padding: 0;
+  color: black;
+  font-size: 16px;
+  transition: 0.4s;
+  line-height: 40px;
+  width: 450px;
+  margin-top: -1px;
+  text-align: center;
+  font-size: small;
+  font-weight: 400;
+}
+.iconbut {
+  color: #ff3705;
+  float: right;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.iconbut:hover {
+    color: #40a9ff;
+    cursor: pointer;
+}
+.drop-box {
+  height: 360px;
+  position: fixed;
+  top: 450px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.search_list {
+  width: 100%;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.4);
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-size: small;
+}
+.search_tags {
+  list-style: none;
+  width: 100%;
+  height: 35px;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 35px;
+  text-indent: 30px;
+  cursor: pointer;
+}
+.search_tags:hover {
+  text-indent: 40px;
+  background: rgba(255, 255, 255, 0.4);
+}
