@@ -2,7 +2,6 @@ package models
 
 import (
 	"Navigation-Web/dao"
-	"Navigation-Web/utils"
 	"time"
 )
 
@@ -11,10 +10,9 @@ type NavigationInfo struct {
 	Title     string    `json:"title"`
 	Url       string    `json:"url"`
 	Logo      string    `json:"logo"`
-	CreatedAt utils.JsonTime `json:"created_time"`
-	UpdatedAt utils.JsonTime `json:"update_time"`
+	CreatedAt time.Time `json:"created_time"`
+	UpdatedAt time.Time `json:"update_time"`
 }
-
 
 func GetAll() (navigationInfos []NavigationInfo, err error) {
 	result := dao.DB.Find(&navigationInfos)
@@ -33,8 +31,8 @@ func GetOne(id int) (navigationInfo *NavigationInfo, err error) {
 }
 
 func Create(info *NavigationInfo) (err error) {
-	info.CreatedAt=utils.JsonTime(time.Now())
-	info.UpdatedAt=utils.JsonTime(time.Now())
+	info.CreatedAt = time.Now()
+	info.UpdatedAt = time.Now()
 	result := dao.DB.Create(&info)
 	if result.Error != nil {
 		return err
@@ -42,7 +40,7 @@ func Create(info *NavigationInfo) (err error) {
 	return nil
 }
 func Update(info *NavigationInfo) (err error) {
-	info.UpdatedAt=utils.JsonTime(time.Now())
+	info.UpdatedAt = time.Now()
 	result := dao.DB.Save(&info)
 	if result.Error != nil {
 		return err

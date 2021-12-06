@@ -67,7 +67,7 @@
          <el-form-item label="标题" :label-width="formLabelWidth">
           <el-input v-model="form.title" autocomplete="off"></el-input>
         </el-form-item>
-        
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -133,11 +133,10 @@ export default {
       console.log(this.form);
       console.log("异步前");
        axios.put("/api/navigation/navigation/"+this.form.id,{
-         data:{
            url:this.form.url,
            title:this.form.title,
            logo:this.form.logo,
-         }
+
        }).then((res) => {
          this.dialogFormVisible=false
          console.log(this.form);
