@@ -10,6 +10,8 @@ type NavigationInfo struct {
 	Title     string    `json:"title"`
 	Url       string    `json:"url"`
 	Logo      string    `json:"logo"`
+	Desc      string    `json:"desc"`
+	Weight    int    `json:"weight"`
 	CreatedAt time.Time `json:"created_time"`
 	UpdatedAt time.Time `json:"update_time"`
 }
