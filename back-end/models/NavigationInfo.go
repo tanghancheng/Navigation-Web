@@ -11,13 +11,13 @@ type NavigationInfo struct {
 	Url       string    `json:"url"`
 	Logo      string    `json:"logo"`
 	Desc      string    `json:"desc"`
-	Weight    int    `json:"weight"`
+	Weight    int       `json:"weight"`
 	CreatedAt time.Time `json:"created_time"`
 	UpdatedAt time.Time `json:"update_time"`
 }
 
 func GetAll() (navigationInfos []NavigationInfo, err error) {
-	result := dao.DB.Find(&navigationInfos)
+	result := dao.DB.Order("weight desc").Find(&navigationInfos)
 	if result.Error != nil {
 		return nil, err
 	}

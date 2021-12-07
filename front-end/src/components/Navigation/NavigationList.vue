@@ -13,7 +13,7 @@
         <el-table-column prop="title" label="标题" width="150">
         </el-table-column>
         <el-table-column prop="url" label="url" width="220"> </el-table-column>
-     
+
         <el-table-column prop="desc" label="desc" width="200">
         </el-table-column>
         <el-table-column prop="weight" label="Weight" width="100">
@@ -64,7 +64,7 @@
           <el-input v-model="form.desc" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="权重" :label-width="formLabelWidth">
-          <el-input v-model="form.weight" autocomplete="off"></el-input>
+          <el-input type="number" v-model.number="form.weight" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
