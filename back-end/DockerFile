@@ -1,0 +1,22 @@
+FROM golang:alpine as builder
+
+WORKDIR /app/navigation
+COPY . .
+
+RUN go env -w GO111MODULE=on
+RUN go env -w GOPROXY=https://goproxy.cn,direct
+RUN go env -w CGO_ENABLED=0
+RUN go env
+RUN go mod tidy
+RUN go build -o server .
+
+FROM alpine:latest
+LABEL MAINTAINER="1370037386@qq.com"
+
+WORKDIR /app/navigation
+
+COPY --from=0 /app/navigation ./
+
+EXPOSE 9099
+
+ENTRYPOINT ./server 

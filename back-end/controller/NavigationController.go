@@ -2,9 +2,11 @@ package controller
 
 import (
 	"Navigation-Web/models"
-	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
 )
 
 type NavigationInfoController struct{}
@@ -35,12 +37,14 @@ func Update(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, "参数无效")
 	}
 	idInt, _ := strconv.Atoi(id)
-	one, err := models.GetOne(idInt)
+	navigationINfo, err := models.GetOne(idInt)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 	}
-	c.BindJSON(&one)
-	err = models.Update(&one)
+	log.Println(navigationINfo)
+	c.BindJSON(&navigationINfo)
+	log.Println(navigationINfo)
+	err = models.Update(navigationINfo)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 	} else {
@@ -51,6 +55,7 @@ func Update(c *gin.Context) {
 func Delete(c *gin.Context) {
 	var navigationINfo models.NavigationInfo
 	c.BindJSON(&navigationINfo)
+	log.Println(navigationINfo)
 	err := models.Delete(&navigationINfo)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)

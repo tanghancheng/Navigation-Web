@@ -2,27 +2,29 @@ package models
 
 import (
 	"Navigation-Web/dao"
-	"gorm.io/gorm"
-	"log"
 	"time"
 )
 
 type NavigationInfo struct {
-	gorm.Model
-	Title string `json:"title"`
-	Url   string `json:"url"`
-	Logo  string `json:"logo"`
+	ID        uint      `json:"id"`
+	Title     string    `json:"title"`
+	Url       string    `json:"url"`
+	Logo      string    `json:"logo"`
+	Desc      string    `json:"desc"`
+	Weight    int       `json:"weight"`
+	CreatedAt time.Time `json:"created_time"`
+	UpdatedAt time.Time `json:"update_time"`
 }
 
 func GetAll() (navigationInfos []NavigationInfo, err error) {
-	result := dao.DB.Find(&navigationInfos)
+	result := dao.DB.Order("weight desc").Find(&navigationInfos)
 	if result.Error != nil {
 		return nil, err
 	}
 	return navigationInfos, nil
 }
-func GetOne(id int) (navigationInfo NavigationInfo, err error) {
-	log.Println(id)
+
+func GetOne(id int) (navigationInfo *NavigationInfo, err error) {
 	result := dao.DB.First(&navigationInfo, id)
 	if result.Error != nil {
 		return navigationInfo, err

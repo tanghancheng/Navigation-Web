@@ -25,7 +25,7 @@ export default {
   },
   methods:{
     goToNavigtion(){
-      this.$router.push("/HelloWorld")
+      this.$router.push("/navigation")
     }
   },
   watch:{

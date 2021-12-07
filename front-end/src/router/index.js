@@ -1,10 +1,16 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+import Navigation from '@/components/Navigation/Navigation'
 import Index from '@/components/Index'
+import NavigationList from '@/components/Navigation/NavigationList'
+import NavigationIndex from '@/components/Navigation/NavigationIndex'
 
 
 Vue.use(Router)
+const originalPush = Router.prototype.push
+Router.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
 
 export default new Router({
   routes: [
@@ -14,9 +20,21 @@ export default new Router({
       component: Index
     },
     {
-      path: '/HelloWorld',
-      name: 'HelloWorld',
-      component: HelloWorld
-    }
+      path: '/navigation',
+      name: 'Navigation',
+      component: Navigation,
+      children: [
+        {
+          path: '/',
+          name: 'navigationIndex',
+          component: NavigationIndex
+        },
+        {
+          path: '/navigation/list',
+          name: 'NavigationList',
+          component: NavigationList
+        }
+      ]
+    },
   ]
 })
