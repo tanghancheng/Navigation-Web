@@ -7,11 +7,11 @@ import 'element-ui/lib/theme-chalk/index.css';
 import App from './App'
 import axios from 'axios'
 
+
 Vue.prototype.$axios = axios
 axios.defaults.baseURL = '/api'
 Vue.config.productionTip = false
 Vue.use(ElementUI)
-
 
 
 /* eslint-disable no-new */

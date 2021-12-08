@@ -1,28 +1,28 @@
 <template>
   <div>
     <el-main>
-      <el-table :data="tableData" v-loading="loading" border style="width: 100%" class="my-border">
-        <el-table-column fixed type="index" label="id" width="120">
+      <el-table :data="tableData" st v-loading="loading" border 
+      style="width: 100%;overflow-y:scroll;height: 680px;" class="my-border content">
+        <el-table-column fixed type="index" label="序号" width="120">
         </el-table-column>
-           <el-table-column prop="logo" label="logo" width="100">
+           <el-table-column prop="logo" label="LOGO" width="100">
           <template slot-scope="scope">
-            <img :src="scope.row.logo" alt="加载失败" width="60px
-            "></img>
+            <img :src="scope.row.logo" alt="加载失败" width="60px">
+            </img>
           </template>
         </el-table-column>
         <el-table-column prop="title" label="标题" width="150">
         </el-table-column>
-        <el-table-column prop="url" label="url" width="220"> </el-table-column>
-
-        <el-table-column prop="desc" label="desc" width="200">
+        <el-table-column prop="url" label="访问网址" width="220"> 
         </el-table-column>
-        <el-table-column prop="weight" label="Weight" width="100">
+        <el-table-column prop="desc" label="简介" width="200">
+        </el-table-column>
+        <el-table-column prop="weight" label="权重" width="100">
         </el-table-column>
         <el-table-column fixed="right" width="200">
           <template slot="header" slot-scope="scope">
-            <el-button type="success" size="medium" @click="getForm(1)"
-              >新增</el-button
-            >
+            <el-button type="success" size="medium" @click="getForm(1)">新增
+              </el-button>
           </template>
           <template slot-scope="scope">
             <el-popconfirm
@@ -36,15 +36,15 @@
               <el-button
                 slot="reference"
                 type="danger"
-                icon="el-icon-delete"
-              ></el-button>
+                icon="el-icon-delete">
+              </el-button>
             </el-popconfirm>
             <el-button
               type="primary"
               icon="el-icon-edit"
               circle
-              @click="getForm(scope.row)"
-            ></el-button>
+              @click="getForm(scope.row)">
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -194,5 +194,8 @@ export default {
   margin-right: 100px;
   min-height: 100px;
   border-radius: 4px;
+}
+.content::-webkit-scrollbar {
+  display: none;
 }
 </style>
