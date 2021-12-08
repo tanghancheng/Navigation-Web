@@ -4,18 +4,19 @@
       <el-container style="height: 775px; border: 0px solid #eee">
         <el-header>
           <el-row :gutter="20">
-            <el-col :span="23"
-              ><div class="grid-content bg-purple"></div
-            ></el-col>
-            <el-col :span="1"
-              ><div class="grid-content bg-purple">
-                <i class="el-icon-share"></i></div
-            ></el-col>
+            <el-col :span="23">
+              <div class="grid-content bg-purple"></div>
+            </el-col>
+            <el-col :span="1">
+              <div class="grid-content bg-purple">
+                <i class="el-icon-share"></i>
+              </div>
+            </el-col>
           </el-row>
         </el-header>
         <el-container>
           <Aside />
-            <router-view></router-view>
+          <router-view></router-view>
         </el-container>
       </el-container>
     </transition>
@@ -37,22 +38,11 @@ export default {
     };
   },
   methods: {
-    handleOpen(key, keyPath) {
-      console.log(key, keyPath);
-    },
-    handleClose(key, keyPath) {
-      console.log(key, keyPath);
-    },
-    transName(webItem) {
-      return this.lang.key === "en" ? webItem.en_name : webItem.name;
-    },
-    moveSlow() {},
     checkToNavigtionList() {
       this.$router.push("/navigationList");
     },
   },
-  created(){
-  }
+  created() {},
 };
 </script>
 

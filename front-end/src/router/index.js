@@ -4,6 +4,9 @@ import Navigation from '@/components/Navigation/Navigation'
 import Index from '@/components/Index'
 import NavigationList from '@/components/Navigation/NavigationList'
 import NavigationIndex from '@/components/Navigation/NavigationIndex'
+import NoteIndex from '@/components/StudyNote/NoteIndex'
+import NoteEditor from '@/components/StudyNote/NoteEditor'
+import NoteHistoryList from '@/components/StudyNote/NoteHistoryList'
 
 
 Vue.use(Router)
@@ -33,8 +36,27 @@ export default new Router({
           path: '/navigation/list',
           name: 'NavigationList',
           component: NavigationList
-        }
+        },
       ]
     },
+    {
+      path: "/note",
+      name: 'note',
+      component: NoteIndex,
+      children: [
+        {
+          path: "/",
+          name: "noteHistoryList",
+          component: NoteHistoryList,
+        },
+        {
+          path: "/noteEditor",
+          name: "noteEditor",
+          component: NoteEditor,
+        },
+
+      ]
+    }
+
   ]
 })
