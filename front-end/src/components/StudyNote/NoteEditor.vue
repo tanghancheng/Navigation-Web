@@ -47,6 +47,8 @@
 
 <script>
 import wangEditor from "wangeditor";
+
+import axios from "axios";
 export default {
   name: "noteEditor",
   components: {},
@@ -55,7 +57,7 @@ export default {
       form: {
         title: "",
       },
-      tags: ["标签一",],
+      tags: ["标签一"],
       inputVisible: false,
       inputValue: "",
     };
@@ -65,9 +67,18 @@ export default {
   },
   methods: {
     onSubmit() {
-      console.log(this.tags);
+      var data = {
+        title: this.form.title,
+        tags: this.tags.toString(),
+        content: this.editor.txt.html(),
+        text:this.editor.txt.text(),
+      };
+      console.log(this.tags.toString);
       console.log(this.form.title);
       console.log(this.editor.txt.html());
+      axios.post("/api/note/create", data).then((res) => {
+        console.log(res);
+      });
     },
     init() {
       this.editor = new wangEditor("#div1");

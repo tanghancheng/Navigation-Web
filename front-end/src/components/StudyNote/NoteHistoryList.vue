@@ -2,14 +2,14 @@
   <div>
     <div class="content" style="width: 90%; height: 680px; overflow-y:scroll; background-color: #fff">
       <ul>
-        <li style="list-style: none" v-for="item in tableData">
+        <li style="list-style: none" v-for="item in tableData" @click="toDetail(item)">
           <div style="height: 90px; width: 100%">
             <el-row>
               <el-col :span="22">
-                <h4>{{ item.name }}</h4>
-                <span>{{ item.address }}</span>
+                <h4>{{ item.title }}</h4>
+                <span>{{ item.text|subString}}</span>
                 </el-col>
-              <el-col :span="2"></br><el-tag type="success">{{item.tag}}</el-tag></el-col>
+              <el-col :span="2"></br><el-tag type="success">{{item.tags}}</el-tag></el-col>
             </el-row>
           </div>
         </li>
@@ -22,25 +22,59 @@
 </template>
 
 <script>
+import axios from "axios";
+import bus from "../../assets/eventBus"
 export default {
   name: "noteHistoryList",
   data() {
     return {
       tableData: [
         {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-          tag: "家",
+          title: "暂无数据",
+          content: "",
+          text: "暂无数据",
+          tags: "",
+          create_time: "",
+          id: 0,
+          update_time: "",
         },
       ],
+      item: {
+        title: "暂无数据",
+        content: "",
+        text: "暂无数据",
+        tags: "",
+        create_time: "",
+        id: 0,
+        update_time: "",
+      },
     };
   },
   methods: {
     load() {
-      this.tableData = this.tableData.concat(this.tableData);
+      // this.tableData = this.tableData.concat(this.tableData);
+      axios.get("/api/note/getAll").then((res) => {
+        this.tableData = res.data;
+      });
       console.log(this.tableData);
     },
+    toDetail(value) {
+      this.item = value;
+      bus.$emit("detail",value)
+      this.$router.push("/noteDetail");
+    },
+  },
+  filters: {
+    subString(content) {
+      if (content != "" && content.length > 24) {
+        return content.substr(0, 50) + "…";
+      } else {
+        return content;
+      }
+    },
+  },
+  created() {
+    this.load();
   },
 };
 </script>
