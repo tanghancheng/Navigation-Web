@@ -2,6 +2,7 @@ package Navigation
 
 import (
 	"Navigation-Web/controller"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,9 +14,9 @@ var NavigationRouter = new(navigationRouter)
 func (n *navigationRouter) InitNavigationRouter(r *gin.RouterGroup) {
 	navigationRouter := r.Group("navigation")
 	{
-		navigationRouter.GET("/navigation", controller.GetAll)
-		navigationRouter.POST("/navigation", controller.Create)
-		navigationRouter.PUT("/navigation/:id", controller.Update)
-		navigationRouter.DELETE("/navigation", controller.Delete)
+		navigationRouter.GET("/navigation", controller.NavigationInfoController.GetAll)
+		navigationRouter.POST("/navigation",  controller.NavigationInfoController.Create)
+		navigationRouter.PUT("/navigation/:id",  controller.NavigationInfoController.Update)
+		navigationRouter.DELETE("/navigation",  controller.NavigationInfoController.Delete)
 	}
 }

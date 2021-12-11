@@ -7,6 +7,7 @@ import NavigationIndex from '@/components/Navigation/NavigationIndex'
 import NoteIndex from '@/components/StudyNote/NoteIndex'
 import NoteEditor from '@/components/StudyNote/NoteEditor'
 import NoteHistoryList from '@/components/StudyNote/NoteHistoryList'
+import NoteDetail from '@/components/StudyNote/NoteDetail'
 
 
 Vue.use(Router)
@@ -53,6 +54,10 @@ export default new Router({
           path: "/noteEditor",
           name: "noteEditor",
           component: NoteEditor,
+        }, {
+          path: "/noteDetail",
+          name: "noteDetail",
+          component: NoteDetail,
         },
 
       ]

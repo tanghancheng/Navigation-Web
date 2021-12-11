@@ -9,10 +9,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type NavigationInfoController struct{}
+type navigationInfoController struct{}
 
-func GetAll(c *gin.Context) {
-	navigationInfos, err := models.GetAll()
+var NavigationInfoController = new(navigationInfoController)
+
+func (n *navigationInfoController) GetAll(c *gin.Context) {
+	//获取用户公网ip以及用户设备号信息
+	log.Println(c.Request.Header.Get("X-Real-IP"))
+	log.Println(c.Request.Header.Get("User-Agent")) //User-Agent
+	log.Println(c.Request.RemoteAddr)
+	navigationInfos, err := models.NavigationInfofunc.GetAll()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 	} else {
@@ -20,10 +26,10 @@ func GetAll(c *gin.Context) {
 	}
 }
 
-func Create(c *gin.Context) {
+func (n *navigationInfoController) Create(c *gin.Context) {
 	var navigationINfo models.NavigationInfo
 	c.BindJSON(&navigationINfo)
-	err := models.Create(&navigationINfo)
+	err := models.NavigationInfofunc.Create(&navigationINfo)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 	} else {
@@ -31,20 +37,20 @@ func Create(c *gin.Context) {
 	}
 }
 
-func Update(c *gin.Context) {
+func (n *navigationInfoController) Update(c *gin.Context) {
 	id, ok := c.Params.Get("id")
 	if !ok {
 		c.JSON(http.StatusInternalServerError, "参数无效")
 	}
 	idInt, _ := strconv.Atoi(id)
-	navigationINfo, err := models.GetOne(idInt)
+	navigationINfo, err := models.NavigationInfofunc.GetOne(idInt)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 	}
 	log.Println(navigationINfo)
 	c.BindJSON(&navigationINfo)
 	log.Println(navigationINfo)
-	err = models.Update(navigationINfo)
+	err = models.NavigationInfofunc.Update(navigationINfo)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 	} else {
@@ -52,11 +58,11 @@ func Update(c *gin.Context) {
 	}
 }
 
-func Delete(c *gin.Context) {
+func (n *navigationInfoController) Delete(c *gin.Context) {
 	var navigationINfo models.NavigationInfo
 	c.BindJSON(&navigationINfo)
 	log.Println(navigationINfo)
-	err := models.Delete(&navigationINfo)
+	err := models.NavigationInfofunc.Delete(&navigationINfo)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 	} else {
