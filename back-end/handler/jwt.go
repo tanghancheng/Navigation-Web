@@ -9,7 +9,7 @@ import (
 	"sync"
 )
 
-var mutex = sync.Mutex{}
+var mutex = sync.RWMutex{}
 
 /**
 处理自定义中间件
