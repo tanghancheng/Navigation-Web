@@ -6,7 +6,10 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
+	"sync"
 )
+
+var mutex = sync.Mutex{}
 
 /**
 处理自定义中间件
@@ -47,17 +50,19 @@ func createUserInfo(ch chan models.User) {
 	//todo 后续增加redis 记录用户信息 就不需要每次都操作數據庫了
 	user := <-ch
 	fmt.Printf("ip %s/n,useDeviceInfo:%s/n", user.Ip, user.BrowserInfo)
-	userByip, err := models.UserFunc.GetUserByIp(user.Ip)
+	userByIp, err := models.UserFunc.GetUserByIp(user.Ip)
 	user.BrowserInfo = base64.StdEncoding.EncodeToString([]byte(user.BrowserInfo))
 	if err != nil {
-		log.Println(err, userByip)
+		log.Println(err, userByIp)
 	}
-	if userByip.ID == 0 && err == nil {
+	if userByIp.ID == 0 && err == nil {
+		mutex.Lock()
 		err = models.UserFunc.Created(&user)
+		mutex.Unlock()
 		if err != nil {
 			log.Println(err, user)
 		}
 	} else {
-		log.Println(err, userByip)
+		log.Println(err, userByIp)
 	}
 }
