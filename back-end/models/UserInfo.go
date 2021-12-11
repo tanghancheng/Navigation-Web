@@ -21,9 +21,11 @@ func (u *User) Created(user *User) (err error) {
 	return nil
 }
 
-func (u *User) GetUserByIp(ip string) (user *User, err error) {
-	if dao.DB.Where("ip =?", ip).Find(&user).Error != nil {
-		return nil, err
+func (u *User) GetUserByIp(ip string) (user User, err error) {
+	user.Ip = ip
+	result := dao.DB.First(&user)
+	if result.Error != nil {
+		return user, err
 	}
 	return user, nil
 }

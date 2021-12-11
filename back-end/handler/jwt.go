@@ -24,25 +24,15 @@ func JWTAuth() gin.HandlerFunc {
 			ip = context.Request.RemoteAddr
 		}
 		browserInfo := context.Request.Header.Get("User-Agent") //User-Agent
-		fmt.Printf("ip %s/n,useDeviceInfo:%s/n", ip, browserInfo)
-		log.Println(context.Request.RemoteAddr)
-		userByip, err := models.UserFunc.GetUserByIp(ip)
-		browserInfo = base64.StdEncoding.EncodeToString([]byte(browserInfo))
-		if err != nil {
-			log.Println(err, userByip)
+
+		var userChan = make(chan models.User)
+
+		go createUserInfo(userChan)
+		var user = models.User{
+			Ip:          ip,
+			BrowserInfo: browserInfo,
 		}
-		if userByip.ID == 0 && err == nil {
-			var user = models.User{
-				Ip:          ip,
-				BrowserInfo: browserInfo,
-			}
-			err = models.UserFunc.Created(&user)
-			if err != nil {
-				log.Println(err, user)
-			}
-		} else {
-			log.Println(err, userByip)
-		}
+		userChan <- user
 
 		//if true {
 		//	context.JSON(http.StatusInternalServerError,"fail")
@@ -50,5 +40,24 @@ func JWTAuth() gin.HandlerFunc {
 		//	return
 		//}
 		context.Next()
+	}
+}
+
+func createUserInfo(ch chan models.User) {
+	//todo 后续增加redis 记录用户信息 就不需要每次都操作數據庫了
+	user := <-ch
+	fmt.Printf("ip %s/n,useDeviceInfo:%s/n", user.Ip, user.BrowserInfo)
+	userByip, err := models.UserFunc.GetUserByIp(user.Ip)
+	user.BrowserInfo = base64.StdEncoding.EncodeToString([]byte(user.BrowserInfo))
+	if err != nil {
+		log.Println(err, userByip)
+	}
+	if userByip.ID == 0 && err == nil {
+		err = models.UserFunc.Created(&user)
+		if err != nil {
+			log.Println(err, user)
+		}
+	} else {
+		log.Println(err, userByip)
 	}
 }
