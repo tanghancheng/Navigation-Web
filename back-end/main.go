@@ -10,7 +10,8 @@ import (
 func main() {
 	DB := dao.InitMysqlConn()
 	err := DB.AutoMigrate(&models.NavigationInfo{})
-	if err != nil {
+	err2 := DB.AutoMigrate(&models.Note{})
+	if err != nil || err2 != nil {
 		fmt.Println("模型绑定失败  ", err)
 	}
 	routers.InitRoutes()
