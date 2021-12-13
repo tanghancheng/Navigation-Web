@@ -36,7 +36,7 @@ export default {
   methods: {
     initNavigaionData() {
       axios.get("/api/navigation/navigation").then((res) => {
-        this.items = res.data;
+        this.items = res.data.data;
         this.items = this.items.slice(0, 6);
         console.log(this.items);
         this.loading =false

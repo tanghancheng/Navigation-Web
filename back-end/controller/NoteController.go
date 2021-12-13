@@ -14,7 +14,6 @@ type noteController struct {
 
 var NoteController = new(noteController)
 
-
 func (noteController *noteController) GetOne(c *gin.Context) {
 	id, ok := c.Params.Get("id")
 	if !ok {
@@ -30,21 +29,24 @@ func (noteController *noteController) GetOne(c *gin.Context) {
 }
 
 func (noteController *noteController) GetAll(c *gin.Context) {
-	notes, err := models.NoteFunc.GetAll()
+	pageInfo := dto.NewPageInfo()
+	c.ShouldBind(pageInfo)
+	page, err := models.NoteFunc.GetAll(pageInfo)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err)
 	} else {
-		c.JSON(http.StatusOK, notes)
+		c.JSON(http.StatusOK, page)
 	}
 }
 func (noteController *noteController) GetListByQueryDto(c *gin.Context) {
-	var noteDto dto.NoteQueryDto
+	noteDto := dto.NewNoteNoteQueryDto()
 	// c.BindJSON(&noteDto)
-	notes, err := models.NoteFunc.GetListByQueryDto(&noteDto)
+	c.ShouldBind(noteDto)
+	page, err := models.NoteFunc.GetListByQueryDto(noteDto)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err)
 	} else {
-		c.JSON(http.StatusOK, notes)
+		c.JSON(http.StatusOK, page)
 	}
 }
 
@@ -88,7 +90,7 @@ func (noteController *noteController) Delete(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 	}
-	note.DeleteStatus=1
+	note.DeleteStatus = 1
 	err = models.NoteFunc.Update(note)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)

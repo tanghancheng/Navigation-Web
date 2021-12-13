@@ -28,7 +28,7 @@
           </div>
         </li>
         <div style="text-align:center;margin:auto;">
-          <el-button type="text" @click="load">加载更多</el-button>
+          <el-button type="text" @click="load(1)">加载更多</el-button>
         </div>
       </ul>
     </div>
@@ -51,18 +51,38 @@ export default {
           update_time: "",
         },
       ],
-      loading: true
+      loading: true,
+      pageSize: 3,
+      pageNum: 1,
     };
   },
   methods: {
-    load() {
-      // this.tableData = this.tableData.concat(this.tableData);
-      this.$axios.get("/api/note/getListByQuery").then((res) => {
-        this.tableData = res.data;
-        this.loading=false
-      }); 
+    load(val) {
+      if (val) {
+        this.pageNum = this.pageNum + 1;
+      }
+      this.$axios
+        .get("/api/note/getListByQuery", {
+          params: {
+            pagesize: this.pageSize,
+            pagenum: this.pageNum,
+          },
+        })
+        .then((res) => {
+          if (val) {
+            this.tableData = this.tableData.concat(res.data.data);
+          } else {
+            this.tableData = res.data.data;
+          }
+          this.loading = false;
+          if (res.data.data.length <= 0) {
+            this.$message({
+              message: "没有更多了",
+              type: "warning",
+            });
+          }
+        });
       console.log(this.tableData);
-      
     },
     toEdit(id) {
       console.log(id);
@@ -79,14 +99,14 @@ export default {
     },
     subTags(content) {
       if (content != "") {
-        return content.split(",")[0]
+        return content.split(",")[0];
       } else {
         return content;
       }
     },
   },
   created() {
-    this.load();
+    this.load(0);
   },
 };
 </script>

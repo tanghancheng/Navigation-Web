@@ -124,7 +124,7 @@ export default {
     },
     initData() {
       axios.get("/api/navigation/navigation").then((res) => {
-        this.tableData = res.data;
+        this.tableData = res.data.data;
         this.loading = false;
       });
     },

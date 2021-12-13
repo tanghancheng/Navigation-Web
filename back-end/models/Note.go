@@ -20,7 +20,6 @@ type Note struct {
 	UpdateAt     time.Time `json:"update_time"`
 }
 
-
 func (n *Note) GetOne(id int) (note *Note, err error) {
 	result := dao.DB.Where("delete_status != ?", 1).First(&note, id)
 	content, err := base64.StdEncoding.DecodeString(note.Content)
@@ -31,25 +30,39 @@ func (n *Note) GetOne(id int) (note *Note, err error) {
 	return note, nil
 }
 
-func (note *Note) GetAll() (notes []Note, err error) {
-	result := dao.DB.Where("delete_status != ?", 1).Find(&notes)
+func (note *Note) GetAll(pageInfo *dto.PageInfo) (page *dto.PageInfo, err error) {
+	var count int64
+	if err = dao.DB.Model(&Note{}).Where("delete_status != ?", 1).Count(&count).Error; err != nil {
+		return nil, err
+	}
+	var notes []Note
+	result := pageInfo.GetPageDB().Order("update_at desc").Where("delete_status != ?", 1).Find(&notes)
 	if err = result.Error; err != nil {
 		return nil, err
 	}
-	return notes, nil
+	pageInfo.Data = notes
+	pageInfo.Total=count
+	return pageInfo, nil
 }
-func(n *Note) GetListByQueryDto(noteDto *dto.NoteQueryDto) (notes []Note,err error){
-	result := dao.DB.Where(&Note{DeleteStatus: 0,EditStatus: 1}).Find(&notes)
+func (n *Note) GetListByQueryDto(noteDto *dto.NoteQueryDto) (page *dto.NoteQueryDto, err error) {
+	var count int64
+	if err = dao.DB.Model(&Note{}).Where(&Note{DeleteStatus: 0, EditStatus: 1}).Count(&count).Error; err != nil {
+		return nil, err
+	}
+	var notes []Note
+	result := noteDto.GetPageDB().Where(&Note{DeleteStatus: 0, EditStatus: 1}).Find(&notes)
 	if err = result.Error; err != nil {
 		return nil, err
 	}
-	return notes,nil
+	noteDto.Data = notes
+	noteDto.Total=count
+	return noteDto, nil
 }
 
 func (n *Note) Create(note *Note) (err error) {
 	note.CreatedAt = time.Now()
 	note.UpdateAt = time.Now()
-	note.Text=strings.ReplaceAll(note.Text,"&nbsp;","")
+	note.Text = strings.ReplaceAll(note.Text, "&nbsp;", "")
 	note.Content = base64.StdEncoding.EncodeToString([]byte(note.Content))
 	if err = dao.DB.Create(&note).Error; err != nil {
 		return err
@@ -60,8 +73,8 @@ func (n *Note) Create(note *Note) (err error) {
 func (n *Note) Update(note *Note) (err error) {
 	note.UpdateAt = time.Now()
 	note.Content = base64.StdEncoding.EncodeToString([]byte(note.Content))
-	oldStr:="&nbsp;"
-	note.Text=strings.ReplaceAll(note.Text,oldStr,"")
+	oldStr := "&nbsp;"
+	note.Text = strings.ReplaceAll(note.Text, oldStr, "")
 	if err = dao.DB.Save(&note).Error; err != nil {
 		return err
 	}

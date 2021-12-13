@@ -2,6 +2,7 @@ package controller
 
 import (
 	"Navigation-Web/models"
+	"Navigation-Web/models/dto"
 	"log"
 	"net/http"
 	"strconv"
@@ -14,15 +15,13 @@ type navigationInfoController struct{}
 var NavigationInfoController = new(navigationInfoController)
 
 func (n *navigationInfoController) GetAll(c *gin.Context) {
-	//获取用户公网ip以及用户设备号信息
-	log.Println(c.Request.Header.Get("X-Real-IP"))
-	log.Println(c.Request.Header.Get("User-Agent")) //User-Agent
-	log.Println(c.Request.RemoteAddr)
-	navigationInfos, err := models.NavigationInfofunc.GetAll()
+	pageInfo:=dto.NewPageInfo()
+	c.ShouldBind(pageInfo)
+	pageInfo, err := models.NavigationInfofunc.GetAll(pageInfo)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 	} else {
-		c.JSON(http.StatusOK, navigationInfos)
+		c.JSON(http.StatusOK, pageInfo)
 	}
 }
 

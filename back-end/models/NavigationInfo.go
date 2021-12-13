@@ -2,6 +2,7 @@ package models
 
 import (
 	"Navigation-Web/dao"
+	"Navigation-Web/models/dto"
 	"time"
 )
 
@@ -16,12 +17,19 @@ type NavigationInfo struct {
 	UpdatedAt time.Time `json:"update_time"`
 }
 
-func (n *NavigationInfo) GetAll() (navigationInfos []NavigationInfo, err error) {
-	result := dao.DB.Order("weight desc").Find(&navigationInfos)
+func (n *NavigationInfo) GetAll(pageinfo *dto.PageInfo) (page *dto.PageInfo,err error) {
+	var count int64
+	if err = dao.DB.Model(&NavigationInfo{}).Count(&count).Error; err != nil {
+		return nil, err
+	}
+	var navigationInfos [] NavigationInfo
+	result:=pageinfo.GetPageDB().Order("weight desc").Find(&navigationInfos)
 	if result.Error != nil {
 		return nil, err
 	}
-	return navigationInfos, nil
+	pageinfo.Total=count
+	pageinfo.Data=navigationInfos
+	return pageinfo, nil
 }
 
 func (n *NavigationInfo) GetOne(id int) (navigationInfo *NavigationInfo, err error) {
