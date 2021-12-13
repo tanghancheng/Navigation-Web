@@ -60,7 +60,7 @@ export default {
       console.log(key, keyPath);
     },
     checkToNoteEditor() {
-      this.$router.push("/noteEditor");
+      this.$router.push("/noteEditList");
     },
     checkToNoteHistoryList() {
       this.$router.push("/note");

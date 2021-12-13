@@ -23,7 +23,7 @@
 
 <script>
 import axios from "axios";
-import bus from "../../assets/eventBus"
+// import bus from "../../assets/EventBus"
 export default {
   name: "noteHistoryList",
   data() {
@@ -39,15 +39,6 @@ export default {
           update_time: "",
         },
       ],
-      item: {
-        title: "暂无数据",
-        content: "",
-        text: "暂无数据",
-        tags: "",
-        create_time: "",
-        id: 0,
-        update_time: "",
-      },
     };
   },
   methods: {
@@ -59,9 +50,7 @@ export default {
       console.log(this.tableData);
     },
     toDetail(value) {
-      this.item = value;
-      bus.$emit("detail",value)
-      this.$router.push("/noteDetail");
+      this.$router.push("/noteDetail/"+value.id);
     },
   },
   filters: {
