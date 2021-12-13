@@ -38,8 +38,21 @@
         </div>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">立即创建</el-button>
-        <el-button>取消</el-button>
+        <el-row>
+          <el-col :span="4">
+            <el-button type="success" @click="onSubmit(1)"
+              >先保存一下</el-button
+            >
+          </el-col>
+          <el-col :span="4">
+            <el-button  @click="closeEditor">取消编辑</el-button>
+          </el-col>
+          <el-col :span="4" :push="13">
+            <el-button type="primary" @click="onSubmit(0)"
+              >保存并退出</el-button
+            >
+          </el-col>
+        </el-row>
       </el-form-item>
     </el-form>
   </div>
@@ -60,25 +73,48 @@ export default {
       tags: ["标签一"],
       inputVisible: false,
       inputValue: "",
+      detail: {
+        id: 0,
+      },
     };
   },
   mounted() {
     this.init();
   },
   methods: {
-    onSubmit() {
+    onSubmit(editStaus) {
       var data = {
+        id: this.detail.id,
         title: this.form.title,
         tags: this.tags.toString(),
         content: this.editor.txt.html(),
-        text:this.editor.txt.text(),
+        text: this.editor.txt.text(),
+        edit_status: 0,
       };
-      console.log(this.tags.toString);
-      console.log(this.form.title);
-      console.log(this.editor.txt.html());
-      axios.post("/api/note/create", data).then((res) => {
-        console.log(res);
-      });
+      if (this.detail.id) {
+        data.edit_status = editStaus;
+        axios.put("/api/note/update/" + this.detail.id, data).then((res) => {
+          if (res.status == 200) {
+            this.$notify({
+              title: "保存成功",
+              message: "保存成功",
+              type: "success",
+            });
+            this.$router.push("/noteEditList");
+          }
+        });
+      } else {
+        axios.post("/api/note/create", data).then((res) => {
+          if (res.status == 200) {
+            this.$notify({
+              title: "保存成功",
+              message: "保存成功",
+              type: "success",
+            });
+            this.$router.push("/noteEditList");
+          }
+        });
+      }
     },
     init() {
       this.editor = new wangEditor("#div1");
@@ -102,6 +138,23 @@ export default {
       this.inputVisible = false;
       this.inputValue = "";
     },
+    closeEditor() {
+      this.$router.push("/noteEditList");
+    },
+  },
+  created() {
+    console.log(this.$route.params);
+    if (this.$route.params) {
+      this.$axios
+        .get("/api/note/getOne/" + this.$route.params.id)
+        .then((res) => {
+          console.log(res.data);
+          this.detail = res.data;
+          this.form.title = this.detail.title;
+          this.tags = this.detail.tags.split(",");
+          this.editor.txt.html(this.detail.content);
+        });
+    }
   },
 };
 </script>

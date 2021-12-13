@@ -2,6 +2,9 @@ package models
 
 import (
 	"Navigation-Web/dao"
+	"Navigation-Web/models/dto"
+	"encoding/base64"
+	"strings"
 	"time"
 )
 
@@ -21,6 +24,8 @@ var NoteFunc = new(Note)
 
 func (n *Note) GetOne(id int) (note *Note, err error) {
 	result := dao.DB.Where("delete_status != ?", 1).First(&note, id)
+	content, err := base64.StdEncoding.DecodeString(note.Content)
+	note.Content = string(content)
 	if result.Error != nil {
 		return note, err
 	}
@@ -34,10 +39,19 @@ func (note *Note) GetAll() (notes []Note, err error) {
 	}
 	return notes, nil
 }
+func(n *Note) GetListByQueryDto(noteDto *dto.NoteQueryDto) (notes []Note,err error){
+	result := dao.DB.Where(&Note{DeleteStatus: 0,EditStatus: 1}).Find(&notes)
+	if err = result.Error; err != nil {
+		return nil, err
+	}
+	return notes,nil
+}
 
 func (n *Note) Create(note *Note) (err error) {
 	note.CreatedAt = time.Now()
 	note.UpdateAt = time.Now()
+	note.Text=strings.ReplaceAll(note.Text,"&nbsp;","")
+	note.Content = base64.StdEncoding.EncodeToString([]byte(note.Content))
 	if err = dao.DB.Create(&note).Error; err != nil {
 		return err
 	}
@@ -46,6 +60,9 @@ func (n *Note) Create(note *Note) (err error) {
 
 func (n *Note) Update(note *Note) (err error) {
 	note.UpdateAt = time.Now()
+	note.Content = base64.StdEncoding.EncodeToString([]byte(note.Content))
+	oldStr:="&nbsp;"
+	note.Text=strings.ReplaceAll(note.Text,oldStr,"")
 	if err = dao.DB.Save(&note).Error; err != nil {
 		return err
 	}

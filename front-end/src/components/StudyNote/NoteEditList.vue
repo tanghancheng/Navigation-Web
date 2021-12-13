@@ -2,14 +2,28 @@
   <div>
     <div class="content" style="width: 90%; height: 680px; overflow-y:scroll; background-color: #fff">
       <ul>
-        <li style="list-style: none" v-for="item in tableData" @click="toDetail(item)">
+          <li  style="list-style: none" >
+          <el-row>
+              <el-col :span="3" :push="21"> 
+                  <el-button  style="margin-bottom: 20px;" @click="toEdit(0)"
+                  type="success"> 新增笔记
+                   </el-button>
+              </el-col>
+           </el-row>
+        </li>
+        <li style="list-style: none" v-for="item in tableData">
           <div style="height: 90px; width: 100%">
             <el-row>
-              <el-col :span="22">
+              <el-col :span="20">
                 <h4>{{ item.title }}</h4>
                 <span>{{ item.text|subString}}</span>
                 </el-col>
               <el-col :span="2"></br><el-tag type="success">{{item.tags}}</el-tag></el-col>
+                <el-col :span="2"> 
+                    <el-button style="margin-top: 20px;margin-left: 20px;" 
+                type="primary" icon="el-icon-edit" @click="toEdit(item.id)" circle>
+                </el-button>
+                </el-col>
             </el-row>
           </div>
         </li>
@@ -22,10 +36,8 @@
 </template>
 
 <script>
-import axios from "axios";
-// import bus from "../../assets/EventBus"
 export default {
-  name: "noteHistoryList",
+  name: "noteEditList",
   data() {
     return {
       tableData: [
@@ -44,13 +56,14 @@ export default {
   methods: {
     load() {
       // this.tableData = this.tableData.concat(this.tableData);
-      axios.get("/api/note/getAll").then((res) => {
+      this.$axios.get("/api/note/getListByQuery").then((res) => {
         this.tableData = res.data;
       });
       console.log(this.tableData);
     },
-    toDetail(value) {
-      this.$router.push("/noteDetail/"+value.id);
+    toEdit(id) {
+      console.log(id);
+      this.$router.push("/noteEditor/" + id);
     },
   },
   filters: {
