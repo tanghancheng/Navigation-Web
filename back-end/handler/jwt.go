@@ -5,9 +5,12 @@ import (
 	"encoding/base64"
 	"fmt"
 	"log"
+  "sync"
+  "github.com/gin-gonic/gin"
 
-	"github.com/gin-gonic/gin"
 )
+
+var mutex = sync.RWMutex{}
 
 /**
 处理自定义中间件
@@ -25,25 +28,15 @@ func JWTAuth() gin.HandlerFunc {
 			ip = context.Request.RemoteAddr
 		}
 		browserInfo := context.Request.Header.Get("User-Agent") //User-Agent
-		fmt.Printf("ip %s/n,useDeviceInfo:%s/n", ip, browserInfo)
-		log.Println(context.Request.RemoteAddr)
-		userByip, err := models.UserFunc.GetUserByIp(ip)
-		browserInfo = base64.StdEncoding.EncodeToString([]byte(browserInfo))
-		if err != nil {
-			log.Println(err, userByip)
+
+		var userChan = make(chan models.User)
+
+		go createUserInfo(userChan)
+		var user = models.User{
+			Ip:          ip,
+			BrowserInfo: browserInfo,
 		}
-		if userByip.ID == 0 && err == nil {
-			var user = models.User{
-				Ip:          ip,
-				BrowserInfo: browserInfo,
-			}
-			err = models.UserFunc.Created(&user)
-			if err != nil {
-				log.Println(err, user)
-			}
-		} else {
-			log.Println(err, userByip)
-		}
+		userChan <- user
 
 		//if true {
 		//	context.JSON(http.StatusInternalServerError,"fail")
@@ -51,5 +44,26 @@ func JWTAuth() gin.HandlerFunc {
 		//	return
 		//}
 		context.Next()
+	}
+}
+
+func createUserInfo(ch chan models.User) {
+	//todo 后续增加redis 记录用户信息 就不需要每次都操作數據庫了
+	user := <-ch
+	fmt.Printf("ip %s/n,useDeviceInfo:%s/n", user.Ip, user.BrowserInfo)
+	userByIp, err := models.UserFunc.GetUserByIp(user.Ip)
+	user.BrowserInfo = base64.StdEncoding.EncodeToString([]byte(user.BrowserInfo))
+	if err != nil {
+		log.Println(err, userByIp)
+	}
+	if userByIp.ID == 0 && err == nil {
+		mutex.Lock()
+		err = models.UserFunc.Created(&user)
+		mutex.Unlock()
+		if err != nil {
+			log.Println(err, user)
+		}
+	} else {
+		log.Println(err, userByIp)
 	}
 }
