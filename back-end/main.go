@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Navigation-Web/config"
 	"Navigation-Web/dao"
 	"Navigation-Web/models"
 	"Navigation-Web/routers"
@@ -8,7 +9,9 @@ import (
 )
 
 func main() {
-	DB := dao.InitMysqlConn()
+	config:=config.InitConfig()
+	
+	DB := dao.InitMysqlConn(config.Mysql)
 	err := DB.AutoMigrate(&models.NavigationInfo{})
 	err2 := DB.AutoMigrate(&models.Note{})
 	err3 := DB.AutoMigrate(&models.User{})

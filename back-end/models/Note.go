@@ -20,7 +20,6 @@ type Note struct {
 	UpdateAt     time.Time `json:"update_time"`
 }
 
-var NoteFunc = new(Note)
 
 func (n *Note) GetOne(id int) (note *Note, err error) {
 	result := dao.DB.Where("delete_status != ?", 1).First(&note, id)

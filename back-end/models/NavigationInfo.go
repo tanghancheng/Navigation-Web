@@ -16,8 +16,6 @@ type NavigationInfo struct {
 	UpdatedAt time.Time `json:"update_time"`
 }
 
-var NavigationInfofunc = new(NavigationInfo)
-
 func (n *NavigationInfo) GetAll() (navigationInfos []NavigationInfo, err error) {
 	result := dao.DB.Order("weight desc").Find(&navigationInfos)
 	if result.Error != nil {
