@@ -1,7 +1,7 @@
 <template>
-      <el-main>
+      <el-main >
         <Search/>
-            <el-row :gutter="20" class="content-row" style="margin-top: 80px;">
+            <el-row  :gutter="20" class="content-row"  v-loading="loading" style="margin-top: 80px;">
               <el-col :span="8"   v-for="(item, idx) in items" :key="idx"
                 ><el-link :underline="false" :href="item.url" target="_blank" >
                 <div class="grid-content  div-border">
@@ -30,6 +30,7 @@ export default {
   data() {
     return {
       items: [],
+      loading: true
     };
   },
   methods: {
@@ -38,6 +39,7 @@ export default {
         this.items = res.data;
         this.items = this.items.slice(0, 6);
         console.log(this.items);
+        this.loading =false
       });
     },
   },

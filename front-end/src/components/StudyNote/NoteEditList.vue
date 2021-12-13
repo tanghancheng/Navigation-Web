@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <div class="content" style="width: 90%; height: 680px; overflow-y:scroll; background-color: #fff">
-      <ul>
+  <div  >
+    <div v-loading="loading" class="content" style="width: 90%; height: 680px; overflow-y:scroll; background-color: #fff">
+      <ul >
           <li  style="list-style: none" >
           <el-row>
               <el-col :span="3" :push="21"> 
@@ -18,7 +18,7 @@
                 <h4>{{ item.title }}</h4>
                 <span>{{ item.text|subString}}</span>
                 </el-col>
-              <el-col :span="2"></br><el-tag type="success">{{item.tags}}</el-tag></el-col>
+              <el-col :span="2"></br><el-tag type="success">{{item.tags|subTags}}</el-tag></el-col>
                 <el-col :span="2"> 
                     <el-button style="margin-top: 20px;margin-left: 20px;" 
                 type="primary" icon="el-icon-edit" @click="toEdit(item.id)" circle>
@@ -42,15 +42,16 @@ export default {
     return {
       tableData: [
         {
-          title: "暂无数据",
+          title: "",
           content: "",
-          text: "暂无数据",
+          text: "",
           tags: "",
           create_time: "",
           id: 0,
           update_time: "",
         },
       ],
+      loading: true
     };
   },
   methods: {
@@ -58,8 +59,10 @@ export default {
       // this.tableData = this.tableData.concat(this.tableData);
       this.$axios.get("/api/note/getListByQuery").then((res) => {
         this.tableData = res.data;
-      });
+        this.loading=false
+      }); 
       console.log(this.tableData);
+      
     },
     toEdit(id) {
       console.log(id);
@@ -70,6 +73,13 @@ export default {
     subString(content) {
       if (content != "" && content.length > 24) {
         return content.substr(0, 50) + "…";
+      } else {
+        return content;
+      }
+    },
+    subTags(content) {
+      if (content != "") {
+        return content.split(",")[0]
       } else {
         return content;
       }

@@ -1,6 +1,7 @@
 <template>
-  <div>
-    <div class="content" style="width: 90%; height: 680px; overflow-y:scroll; background-color: #fff">
+  <div >
+    <div class="content" style="width: 90%; height: 680px; overflow-y:scroll; background-color: #fff"
+     v-loading="loading">
       <ul>
         <li style="list-style: none" v-for="item in tableData" @click="toDetail(item)">
           <div style="height: 90px; width: 100%">
@@ -9,7 +10,7 @@
                 <h4>{{ item.title }}</h4>
                 <span>{{ item.text|subString}}</span>
                 </el-col>
-              <el-col :span="2"></br><el-tag type="success">{{item.tags}}</el-tag></el-col>
+              <el-col :span="2"></br><el-tag type="success">{{item.tags|subTags}}</el-tag></el-col>
             </el-row>
           </div>
         </li>
@@ -30,15 +31,16 @@ export default {
     return {
       tableData: [
         {
-          title: "暂无数据",
+          title: "",
           content: "",
-          text: "暂无数据",
+          text: "",
           tags: "",
           create_time: "",
           id: 0,
           update_time: "",
         },
       ],
+      loading: true,
     };
   },
   methods: {
@@ -46,11 +48,13 @@ export default {
       // this.tableData = this.tableData.concat(this.tableData);
       axios.get("/api/note/getAll").then((res) => {
         this.tableData = res.data;
+        this.loading=false
       });
       console.log(this.tableData);
+      
     },
     toDetail(value) {
-      this.$router.push("/noteDetail/"+value.id);
+      this.$router.push("/noteDetail/" + value.id);
     },
   },
   filters: {
@@ -61,8 +65,15 @@ export default {
         return content;
       }
     },
+    subTags(content) {
+      if (content != "") {
+        return content.split(",")[0]
+      } else {
+        return content;
+      }
+    },
   },
-  created() {
+  mounted() {
     this.load();
   },
 };

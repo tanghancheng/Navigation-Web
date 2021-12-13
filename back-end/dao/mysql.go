@@ -11,7 +11,8 @@ import (
 
 var DB *gorm.DB
 
-func InitMysqlConn(mysqlConfig config.Mysql) (db *gorm.DB) {
+func InitMysqlConn() (db *gorm.DB) {
+	mysqlConfig:=config.ConfigFunc.Mysql
 	fmt.Printf("mysqlConfig: %v\n", mysqlConfig)
 	dsn:=fmt.Sprintf("%s:%s@tcp(%s)%s",mysqlConfig.Username,mysqlConfig.Password,mysqlConfig.Addr,mysqlConfig.Database)
 	// dsn := "root:admin@tcp(116.205.138.224:3306)/Navigation_Web?charset=utf8mb4&parseTime=True&loc=Local"
