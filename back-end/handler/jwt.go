@@ -4,9 +4,10 @@ import (
 	"Navigation-Web/models"
 	"encoding/base64"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"log"
-	"sync"
+  "sync"
+  "github.com/gin-gonic/gin"
+
 )
 
 var mutex = sync.RWMutex{}

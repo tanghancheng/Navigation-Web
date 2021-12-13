@@ -8,6 +8,7 @@ import App from './App'
 import axios from 'axios'
 
 
+Vue.prototype.$EventBus = new Vue()   
 Vue.prototype.$axios = axios
 axios.defaults.baseURL = '/api'
 Vue.config.productionTip = false
