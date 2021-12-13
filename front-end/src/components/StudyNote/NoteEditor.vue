@@ -89,7 +89,7 @@ export default {
         tags: this.tags.toString(),
         content: this.editor.txt.html(),
         text: this.editor.txt.text(),
-        edit_status: 0,
+        edit_status: editStaus,
       };
       if (this.detail.id) {
         data.edit_status = editStaus;
