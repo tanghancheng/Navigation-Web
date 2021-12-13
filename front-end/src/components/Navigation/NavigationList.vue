@@ -1,8 +1,8 @@
 <template>
   <div>
     <el-main>
-      <el-table :data="tableData" st v-loading="loading" border 
-      style="width: 100%;overflow-y:scroll;height: 680px;" class="my-border content">
+      <div class="my-border content" style="width: 100%;overflow-y:scroll;height: 650px;background-color: #fff;">
+      <el-table :data="tableData" st v-loading="loading" border >
         <el-table-column fixed type="index" label="序号" width="120">
         </el-table-column>
            <el-table-column prop="logo" label="LOGO" width="100">
@@ -48,6 +48,17 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-row>
+        <el-col :push="8">
+           <el-pagination  @current-change="handleCurrentChange"
+                            :current-page="currentPage"
+                            :page-size="pagesize"        
+                            layout="total,  prev, pager, next"
+                            :total="total">   
+                    </el-pagination>
+        </el-col>
+      </el-row>
+      </div>
     </el-main>
     <el-dialog title="修改导航栏" :visible.sync="dialogFormVisible">
       <el-form :model="form">
@@ -95,6 +106,10 @@ export default {
       },
       loading: true,
       formLabelWidth: "120px",
+      currentPage: 1, //初始页
+      pagesize: 5, //    每页的数据
+      userList: [],
+      total: 0,
     };
   },
   methods: {
@@ -123,10 +138,18 @@ export default {
         });
     },
     initData() {
-      axios.get("/api/navigation/navigation").then((res) => {
-        this.tableData = res.data.data;
-        this.loading = false;
-      });
+      axios
+        .get("/api/navigation/navigation", {
+          params: {
+            pagesize: this.pagesize,
+            pagenum: this.currentPage,
+          },
+        })
+        .then((res) => {
+          this.tableData = res.data.data;
+          this.total = res.data.total;
+          this.loading = false;
+        });
     },
     getForm(row) {
       this.dialogFormVisible = true;
@@ -170,6 +193,24 @@ export default {
           });
       }
       this.$router.go(0);
+    },
+    handleSizeChange: function (size) {
+      this.pagesize = size;
+      console.log(this.pagesize); //每页下拉显示数据
+    },
+    handleCurrentChange: function (currentPage) {
+      this.currentPage = currentPage;
+      axios
+        .get("/api/navigation/navigation", {
+          params: {
+            pagesize: this.pagesize,
+            pagenum: this.currentPage,
+          },
+        })
+        .then((res) => {
+          this.tableData = res.data.data;
+          this.loading = false;
+        });
     },
   },
   created() {
