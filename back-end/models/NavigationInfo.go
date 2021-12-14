@@ -41,8 +41,8 @@ func (n *NavigationInfo) GetOne(id int) (navigationInfo *NavigationInfo, err err
 }
 
 func (n *NavigationInfo) Create(info *NavigationInfo) (err error) {
-	info.CreatedAt = time.Now()
-	info.UpdatedAt = time.Now()
+	info.CreatedAt = time.Now().Local().UTC()
+	info.UpdatedAt = time.Now().Local().UTC()
 	result := dao.DB.Create(&info)
 	if result.Error != nil {
 		return err
@@ -50,7 +50,7 @@ func (n *NavigationInfo) Create(info *NavigationInfo) (err error) {
 	return nil
 }
 func (n *NavigationInfo) Update(info *NavigationInfo) (err error) {
-	info.UpdatedAt = time.Now()
+	info.UpdatedAt = time.Now().Local().UTC()
 	result := dao.DB.Save(&info)
 	if result.Error != nil {
 		return err

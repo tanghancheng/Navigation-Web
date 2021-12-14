@@ -33,7 +33,7 @@ func (u *User) GetUserByIp(ip string) (user User, err error) {
 }
 
 func (u *User) Update(user *User) (err error) {
-	user.UpdatedAt = time.Now()
+	user.UpdatedAt = time.Now().Local().UTC()
 	if err = dao.DB.Save(&user).Error; err != nil {
 		return err
 	}
