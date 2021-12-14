@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <div class="content" style="width: 90%; height: 680px; overflow-y:scroll; background-color: #fff">
-      <ul>
+  <div  >
+    <div v-loading="loading" class="content" style="width: 90%; height: 680px; overflow-y:scroll; background-color: #fff">
+      <ul >
           <li  style="list-style: none" >
           <el-row>
               <el-col :span="3" :push="21"> 
@@ -18,7 +18,7 @@
                 <h4>{{ item.title }}</h4>
                 <span>{{ item.text|subString}}</span>
                 </el-col>
-              <el-col :span="2"></br><el-tag type="success">{{item.tags}}</el-tag></el-col>
+              <el-col :span="2"></br><el-tag type="success">{{item.tags|subTags}}</el-tag></el-col>
                 <el-col :span="2"> 
                     <el-button style="margin-top: 20px;margin-left: 20px;" 
                 type="primary" icon="el-icon-edit" @click="toEdit(item.id)" circle>
@@ -28,7 +28,7 @@
           </div>
         </li>
         <div style="text-align:center;margin:auto;">
-          <el-button type="text" @click="load">加载更多</el-button>
+          <el-button type="text" @click="load(1)">加载更多</el-button>
         </div>
       </ul>
     </div>
@@ -42,23 +42,46 @@ export default {
     return {
       tableData: [
         {
-          title: "暂无数据",
+          title: "",
           content: "",
-          text: "暂无数据",
+          text: "",
           tags: "",
           create_time: "",
           id: 0,
           update_time: "",
         },
       ],
+      loading: true,
+      pageSize: 3,
+      pageNum: 1,
     };
   },
   methods: {
-    load() {
-      // this.tableData = this.tableData.concat(this.tableData);
-      this.$axios.get("/api/note/getListByQuery").then((res) => {
-        this.tableData = res.data;
-      });
+    load(val) {
+      if (val) {
+        this.pageNum = this.pageNum + 1;
+      }
+      this.$axios
+        .get("/api/note/getListByQuery", {
+          params: {
+            pagesize: this.pageSize,
+            pagenum: this.pageNum,
+          },
+        })
+        .then((res) => {
+          if (val) {
+            this.tableData = this.tableData.concat(res.data.data);
+          } else {
+            this.tableData = res.data.data;
+          }
+          this.loading = false;
+          if (res.data.data.length <= 0) {
+            this.$message({
+              message: "没有更多了",
+              type: "warning",
+            });
+          }
+        });
       console.log(this.tableData);
     },
     toEdit(id) {
@@ -74,9 +97,16 @@ export default {
         return content;
       }
     },
+    subTags(content) {
+      if (content != "") {
+        return content.split(",")[0];
+      } else {
+        return content;
+      }
+    },
   },
   created() {
-    this.load();
+    this.load(0);
   },
 };
 </script>

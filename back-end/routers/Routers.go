@@ -1,6 +1,7 @@
 package routers
 
 import (
+	"Navigation-Web/config"
 	"Navigation-Web/handler"
 	"Navigation-Web/routers/Navigation"
 	"fmt"
@@ -17,7 +18,7 @@ func InitRoutes() {
 		Navigation.NavigationRouter.InitNavigationRouter(apiRouter)
 		Navigation.NoteRouter.InitNoteRouter(apiRouter)
 	}
-	err := r.Run(":9099")
+	err := r.Run(fmt.Sprintf(":%s",config.ConfigFunc.Server.Port))
 	if err != nil {
 		fmt.Println("服务启动失败", err)
 	}

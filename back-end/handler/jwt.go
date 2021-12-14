@@ -5,9 +5,10 @@ import (
 	"encoding/base64"
 	"fmt"
 	"log"
-  "sync"
-  "github.com/gin-gonic/gin"
+	"strings"
+	"sync"
 
+	"github.com/gin-gonic/gin"
 )
 
 var mutex = sync.RWMutex{}
@@ -25,7 +26,8 @@ func JWTAuth() gin.HandlerFunc {
 		//否则获取到的地址则会是nginx的内外ip
 		ip := context.Request.Header.Get("X-Real-IP")
 		if ip == "" {
-			ip = context.Request.RemoteAddr
+			//如果不是通过nginx代理转发的地址会有一个端口号 
+			ip = strings.Split(context.Request.RemoteAddr, ":")[0]
 		}
 		browserInfo := context.Request.Header.Get("User-Agent") //User-Agent
 
@@ -50,7 +52,7 @@ func JWTAuth() gin.HandlerFunc {
 func createUserInfo(ch chan models.User) {
 	//todo 后续增加redis 记录用户信息 就不需要每次都操作數據庫了
 	user := <-ch
-	fmt.Printf("ip %s/n,useDeviceInfo:%s/n", user.Ip, user.BrowserInfo)
+	fmt.Printf("ip %s ,useDeviceInfo:%s  ", user.Ip, user.BrowserInfo)
 	userByIp, err := models.UserFunc.GetUserByIp(user.Ip)
 	user.BrowserInfo = base64.StdEncoding.EncodeToString([]byte(user.BrowserInfo))
 	if err != nil {
@@ -64,6 +66,9 @@ func createUserInfo(ch chan models.User) {
 			log.Println(err, user)
 		}
 	} else {
-		log.Println(err, userByIp)
+		models.UserFunc.Update(&userByIp)
+		if err != nil {
+			log.Println(err, user)
+		}
 	}
 }

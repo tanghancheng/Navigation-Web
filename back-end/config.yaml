@@ -1,0 +1,7 @@
+server:
+  port: 9099
+mysql:
+  addr: 116.205.138.224:3306
+  database: /Navigation_Web?charset=utf8mb4&parseTime=True&loc=Local
+  username: root
+  password: admin

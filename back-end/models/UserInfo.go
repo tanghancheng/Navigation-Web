@@ -2,6 +2,8 @@ package models
 
 import (
 	"Navigation-Web/dao"
+	"time"
+
 	"gorm.io/gorm"
 )
 
@@ -23,9 +25,17 @@ func (u *User) Created(user *User) (err error) {
 
 func (u *User) GetUserByIp(ip string) (user User, err error) {
 	user.Ip = ip
-	result := dao.DB.First(&user)
+	result := dao.DB.Where("ip = ?",ip).First(&user)
 	if result.Error != nil {
 		return user, err
 	}
 	return user, nil
+}
+
+func (u *User) Update(user *User) (err error) {
+	user.UpdatedAt = time.Now()
+	if err = dao.DB.Save(&user).Error; err != nil {
+		return err
+	}
+	return nil
 }
