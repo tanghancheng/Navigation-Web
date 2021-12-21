@@ -23,17 +23,17 @@
         <i class="el-icon-location"></i>
         <span slot="title">导航页</span>
       </el-menu-item>
-      <el-menu-item index="2">
-        <i class="el-icon-menu"></i>
-        <span slot="title">导航二</span>
-      </el-menu-item>
-      <el-menu-item index="3" @click="checkToNoteNavigtion">
+      <el-menu-item index="2" @click="checkToNoteNavigtion">
         <i class="el-icon-document"></i>
         <span slot="title">笔记</span>
       </el-menu-item>
-      <el-menu-item index="4" @click="checkToNavigtionList">
+      <el-menu-item index="3" @click="checkToNavigtionList">
         <i class="el-icon-setting"></i>
         <span slot="title">导航列表</span>
+      </el-menu-item>
+      <el-menu-item index="4" @click="checkToMore">
+        <i class="el-icon-menu"></i>
+        <span slot="title">更多功能</span>
       </el-menu-item>
     </el-menu>
   </el-aside>
@@ -74,6 +74,9 @@ export default {
     },
     checkToNoteNavigtion() {
       this.$router.push("/note");
+    },
+    checkToMore() {
+      this.$router.push("/more");
     },
   },
 };

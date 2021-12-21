@@ -60,8 +60,8 @@ func (n *Note) GetListByQueryDto(noteDto *dto.NoteQueryDto) (page *dto.NoteQuery
 }
 
 func (n *Note) Create(note *Note) (err error) {
-	note.CreatedAt = time.Now()
-	note.UpdateAt = time.Now()
+	note.CreatedAt = time.Now().Local().UTC()
+	note.UpdateAt = time.Now().Local().UTC()
 	note.Text = strings.ReplaceAll(note.Text, "&nbsp;", "")
 	note.Content = base64.StdEncoding.EncodeToString([]byte(note.Content))
 	if err = dao.DB.Create(&note).Error; err != nil {
@@ -71,7 +71,7 @@ func (n *Note) Create(note *Note) (err error) {
 }
 
 func (n *Note) Update(note *Note) (err error) {
-	note.UpdateAt = time.Now()
+	note.UpdateAt = time.Now().Local()
 	note.Content = base64.StdEncoding.EncodeToString([]byte(note.Content))
 	oldStr := "&nbsp;"
 	note.Text = strings.ReplaceAll(note.Text, oldStr, "")
