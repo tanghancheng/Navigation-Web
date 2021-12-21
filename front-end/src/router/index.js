@@ -9,6 +9,7 @@ import NoteEditor from '@/components/StudyNote/NoteEditor'
 import NoteHistoryList from '@/components/StudyNote/NoteHistoryList'
 import NoteDetail from '@/components/StudyNote/NoteDetail'
 import NoteEditList from '@/components/StudyNote/NoteEditList'
+import MoreIndex from '@/components/More/index'
 
 
 Vue.use(Router)
@@ -68,6 +69,11 @@ export default new Router({
         },
 
       ]
+    },
+    {
+      path: '/more',
+      name: 'More',
+      component: MoreIndex,
     }
 
   ]
